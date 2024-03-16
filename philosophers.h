@@ -6,7 +6,7 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 23:09:18 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/15 20:39:21 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/16 22:14:43 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PHILOSOPHERS_H
 
 # include <unistd.h>
+# include <limits.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/time.h>
@@ -46,6 +47,18 @@ typedef struct s_philo
 	t_table			*table;
 }				t_philo;
 
-void	free_philos(t_philo *philos);
+void		free_philos(t_philo *philos);
+
+long int	get_current_time(void);
+void		ft_usleep(long int time_in_ms);
+int			stop_check(t_table *table);
+long		ft_atoi(const char *str);
+
+void		*maestro(void *ptr);
+
+void		eat(t_philo *philo, t_table *table);
+void		think(t_philo *philo);
+void		sleep_state(t_philo *philo, t_table *table);
+void		*routine(void *void_philo);
 
 #endif
