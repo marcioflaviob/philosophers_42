@@ -6,11 +6,11 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 20:21:47 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/15 23:57:45 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/16 23:31:31 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "../includes/philosophers.h"
 
 void	join_philos(t_philo *philos)
 {
@@ -55,4 +55,12 @@ void	free_philos(t_philo *philos)
 	}
 	free(philos);
 }
+
+// void	free_everything(t_philo *philos)
+// {
+// 	t_table	*table;
+
+// 	table = philos[0].table;
+	
+// }
 

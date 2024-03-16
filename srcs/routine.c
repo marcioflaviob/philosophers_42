@@ -6,11 +6,11 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 21:31:07 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/16 22:03:26 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/16 23:31:42 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "../includes/philosophers.h"
 
 void	eat(t_philo *philo, t_table *table)
 {

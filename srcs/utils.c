@@ -6,11 +6,11 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 21:34:24 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/16 22:18:04 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/16 23:31:47 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "../includes/philosophers.h"
 
 long int	get_current_time(void)
 {

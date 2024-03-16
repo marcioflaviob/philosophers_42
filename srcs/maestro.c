@@ -6,11 +6,11 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 21:32:53 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/16 22:04:57 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/16 23:31:37 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "../includes/philosophers.h"
 
 int	is_dead(t_philo *philos)
 {

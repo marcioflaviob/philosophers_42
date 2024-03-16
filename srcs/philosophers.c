@@ -6,11 +6,37 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 23:11:34 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/16 22:09:18 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/16 23:31:39 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "../includes/philosophers.h"
+
+void	*philo_init(t_table **table, t_philo *philo, int *i)
+{
+	philo->id = *i;
+	philo->r_fork = *i;
+	philo->l_fork = *i - 1;
+	philo->eat_counter = (*table)->eat_num;
+	philo->table = *table;
+	philo->last_meal = 0;
+	philo->is_eating = 0;
+	if ((*table)->philo_num == 1)
+		philo->l_fork = -1;
+	if (*i == 0 && (*table)->philo_num > 1)
+		philo->l_fork = ((*table)->philo_num - 1);
+	philo->thread = (pthread_t *) malloc (sizeof(pthread_t));
+	(*table)->forks[*i] = (pthread_mutex_t *) malloc (sizeof(pthread_mutex_t));
+	philo->eat_lock = (pthread_mutex_t *) malloc (sizeof(pthread_mutex_t));
+	if (!philo->thread || !(*table)->forks[*i] || !philo->eat_lock)
+		return (NULL);
+	pthread_mutex_init(philo->eat_lock, NULL);
+	pthread_mutex_lock(philo->eat_lock);
+	philo->last_meal = get_current_time();
+	pthread_mutex_unlock(philo->eat_lock);
+	pthread_mutex_init((*table)->forks[(*i)++], NULL);
+	return (philo);
+}
 
 t_philo	*create_philos(t_table *table)
 {
@@ -19,34 +45,15 @@ t_philo	*create_philos(t_table *table)
 
 	i = 0;
 	philos = (t_philo *) malloc (table->philo_num * sizeof(t_philo));
-	if (!philos)
+	table->stop_lock = (pthread_mutex_t *) malloc (sizeof(pthread_mutex_t));
+	if (!philos || !table->stop_lock)
 		return (NULL);
 	table->stop = 0;
 	table->start_time = get_current_time();
-	table->stop_lock = (pthread_mutex_t *) malloc (sizeof(pthread_mutex_t));
 	pthread_mutex_init(table->stop_lock, NULL);
 	while (i < table->philo_num)
-	{
-		philos[i].id = i;
-		philos[i].r_fork = i;
-		philos[i].l_fork = i - 1;
-		philos[i].eat_counter = table->eat_num;
-		philos[i].table = table;
-		philos[i].last_meal = 0;
-		philos[i].is_eating = 0;
-		if (table->philo_num == 1)
-			philos[i].l_fork = -1;
-		if (i == 0 && table->philo_num > 1)
-			philos[i].l_fork = (table->philo_num - 1);
-		philos[i].thread = (pthread_t *) malloc (sizeof(pthread_t));
-		table->forks[i] = (pthread_mutex_t *) malloc (sizeof(pthread_mutex_t));
-		philos[i].eat_lock = (pthread_mutex_t *) malloc (sizeof(pthread_mutex_t));
-		pthread_mutex_init(philos[i].eat_lock, NULL);
-		pthread_mutex_lock(philos[i].eat_lock);
-		philos[i].last_meal = get_current_time();
-		pthread_mutex_unlock(philos[i].eat_lock);
-		pthread_mutex_init(table->forks[i++], NULL);
-	}
+		if (!philo_init(&table, &philos[i], &i))
+			return (NULL);
 	i = 0;
 	while (i < table->philo_num)
 	{
@@ -102,6 +109,8 @@ int	main(int argc, char **argv)
 	if (!init(argc, argv, &table))
 		return (0);
 	philos = create_philos(&table);
+	if (!philos)
+		return (0);
 	program_start(philos);
 	pthread_join(*(table.thread), NULL);
 	free(table.thread);
