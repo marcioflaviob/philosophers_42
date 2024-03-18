@@ -6,7 +6,7 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 23:11:34 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/18 17:35:59 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/18 18:22:22 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ int	init(int argc, char **argv, t_table *table)
 	pthread_mutex_t	**forks;
 
 	if (argc != 5 && argc != 6)
-		return (0);
+		return (printf("Usage: ./philo [philo_num] [time_to_die] [time_to_eat] \
+[time_to_sleep] [eat_counter]\n"), 0);
 	table->philo_num = ft_atoi(argv[1]);
 	table->time_starve = ft_atoi(argv[2]);
 	table->time_eat = ft_atoi(argv[3]);
