@@ -6,11 +6,25 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 21:32:53 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/16 23:31:37 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/18 18:03:58 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
+
+int	print_msg(t_philo *philo, t_table *table, char *msg)
+{
+	pthread_mutex_lock(table->print_lock);
+	if (stop_check(table))
+	{
+		pthread_mutex_unlock(table->print_lock);
+		return (1);
+	}
+	printf("%zu Philosopher %d %s.\n", (get_current_time() - table->start_time),
+		(philo->id + 1), msg);
+	pthread_mutex_unlock(table->print_lock);
+	return (0);
+}
 
 int	is_dead(t_philo *philos)
 {
@@ -25,7 +39,8 @@ int	is_dead(t_philo *philos)
 		if ((get_current_time() - philos[i].last_meal >= table->time_starve)
 			&& !philos[i].is_eating)
 		{
-			printf("%zu Philosopher %d died.\n", (get_current_time() - table->start_time), philos[i].id + 1);
+			printf("%zu Philosopher %d died.\n",
+				(get_current_time() - table->start_time), philos[i].id + 1);
 			return (1);
 		}
 		pthread_mutex_unlock(philos[i++].eat_lock);
@@ -48,12 +63,10 @@ int	all_ate(t_philo *philos)
 		if (philos[i].eat_counter <= 0)
 			counter++;
 		pthread_mutex_unlock(philos[i++].eat_lock);
-		// printf("\nPhilo %d eat counter is %d\n", i, philos[i].eat_counter);
 	}
-	// printf("\nTotal eaters is %d and num of philos is %d\n", counter, philos[0].table->philo_num);
 	if (counter == philos[0].table->philo_num)
 	{
-		printf("\n\nEverybody ate %d time(s).\n\n", philos[0].table->eat_num);
+		printf("Everybody ate %d time(s).\n\n", philos[0].table->eat_num);
 		return (1);
 	}
 	return (0);
@@ -68,13 +81,16 @@ void	*maestro(void *ptr)
 	philos = (t_philo *)ptr;
 	while (1)
 	{
+		pthread_mutex_lock(philos[0].table->print_lock);
 		if (all_ate(philos) || is_dead(philos))
 		{
 			pthread_mutex_lock(philos[0].table->stop_lock);
 			philos[0].table->stop = 1;
 			pthread_mutex_unlock(philos[0].table->stop_lock);
+			pthread_mutex_unlock(philos[0].table->print_lock);
 			break ;
 		}
+		pthread_mutex_unlock(philos[0].table->print_lock);
 	}
 	return (ptr);
 }

@@ -6,7 +6,7 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 23:11:34 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/16 23:31:39 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/18 17:35:59 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,13 @@ t_philo	*create_philos(t_table *table)
 	i = 0;
 	philos = (t_philo *) malloc (table->philo_num * sizeof(t_philo));
 	table->stop_lock = (pthread_mutex_t *) malloc (sizeof(pthread_mutex_t));
-	if (!philos || !table->stop_lock)
+	table->print_lock = (pthread_mutex_t *) malloc (sizeof(pthread_mutex_t));
+	if (!philos || !table->stop_lock || !table->print_lock)
 		return (NULL);
 	table->stop = 0;
 	table->start_time = get_current_time();
 	pthread_mutex_init(table->stop_lock, NULL);
+	pthread_mutex_init(table->print_lock, NULL);
 	while (i < table->philo_num)
 		if (!philo_init(&table, &philos[i], &i))
 			return (NULL);
@@ -63,15 +65,16 @@ t_philo	*create_philos(t_table *table)
 	return (philos);
 }
 
-void	program_start(t_philo *philos)
+int	program_start(t_philo *philos)
 {
 	t_table	*table;
 
 	table = philos[0].table;
 	table->thread = (pthread_t *) malloc (sizeof(pthread_t));
-	// if (!table->thread)
-		//ERROR
+	if (!table->thread)
+		return (0);
 	pthread_create(table->thread, NULL, &maestro, philos);
+	return (1);
 }
 
 int	init(int argc, char **argv, t_table *table)
@@ -111,10 +114,9 @@ int	main(int argc, char **argv)
 	philos = create_philos(&table);
 	if (!philos)
 		return (0);
-	program_start(philos);
-	pthread_join(*(table.thread), NULL);
+	if (program_start(philos))
+		pthread_join(*(table.thread), NULL);
 	free(table.thread);
 	free_philos(philos);
 	return (0);
 }
-
