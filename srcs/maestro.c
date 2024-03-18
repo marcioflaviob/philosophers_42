@@ -6,7 +6,7 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 21:32:53 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/18 18:03:58 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/18 23:14:03 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	is_dead(t_philo *philos)
 		{
 			printf("%zu Philosopher %d died.\n",
 				(get_current_time() - table->start_time), philos[i].id + 1);
+			pthread_mutex_unlock(philos[i++].eat_lock);
 			return (1);
 		}
 		pthread_mutex_unlock(philos[i++].eat_lock);

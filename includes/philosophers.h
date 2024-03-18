@@ -6,7 +6,7 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 23:09:18 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/18 18:04:09 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/18 23:13:03 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ typedef struct s_philo
 void		free_philos(t_philo *philos);
 
 long int	get_current_time(void);
-void		ft_usleep(long int time_in_ms);
+void		ft_usleep(long int time_in_ms, t_table *table);
 int			stop_check(t_table *table);
 long		ft_atoi(const char *str);
 int			print_msg(t_philo *philo, t_table *table, char *msg);

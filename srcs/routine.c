@@ -6,7 +6,7 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 21:31:07 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/18 18:04:39 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/18 23:13:37 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	eat_helper(t_philo *philo, t_table *table)
 	philo->last_meal = get_current_time();
 	philo->is_eating = 1;
 	pthread_mutex_unlock(philo->eat_lock);
-	ft_usleep(table->time_eat);
+	ft_usleep(table->time_eat, table);
 	pthread_mutex_unlock(table->forks[philo->r_fork]);
 	pthread_mutex_unlock(table->forks[philo->l_fork]);
 	pthread_mutex_lock(philo->eat_lock);
@@ -37,7 +37,7 @@ void	eat(t_philo *philo, t_table *table)
 	}
 	if (table->philo_num == 1)
 	{
-		ft_usleep(table->time_starve);
+		ft_usleep(table->time_starve, table);
 		pthread_mutex_unlock(table->forks[philo->r_fork]);
 		return ;
 	}
@@ -68,7 +68,7 @@ void	sleep_state(t_philo *philo, t_table *table)
 		return ;
 	if (stop_check(table))
 		return ;
-	ft_usleep(table->time_sleep);
+	ft_usleep(table->time_sleep, table);
 	if (stop_check(table))
 		return ;
 }
@@ -81,7 +81,7 @@ void	*routine(void *void_philo)
 	philo = void_philo;
 	table = philo->table;
 	if (philo->id % 2 == 0)
-		ft_usleep(table->time_eat / 10);
+		ft_usleep(table->time_eat / 10, table);
 	while (1)
 	{
 		eat(philo, table);

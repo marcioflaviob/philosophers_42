@@ -6,7 +6,7 @@
 /*   By: mbrandao <mbrandao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 21:34:24 by mbrandao          #+#    #+#             */
-/*   Updated: 2024/03/16 23:31:47 by mbrandao         ###   ########.fr       */
+/*   Updated: 2024/03/18 23:12:21 by mbrandao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,18 @@ long int	get_current_time(void)
 	return (time);
 }
 
-void	ft_usleep(long int time_in_ms)
+void	ft_usleep(long int time_in_ms, t_table *table)
 {
 	long int	start_time;
 
 	start_time = 0;
 	start_time = get_current_time();
 	while ((get_current_time() - start_time) < time_in_ms)
+	{
+		if (stop_check(table))
+			return ;
 		usleep(time_in_ms / 10);
+	}
 }
 
 int	stop_check(t_table *table)
